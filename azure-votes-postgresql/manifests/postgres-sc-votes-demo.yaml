@@ -39,29 +39,16 @@ spec:
     name: ${SERVER}
   charset: utf8
 ---
-apiVersion: microsoft.dbforpostgresql.azure.com/v1alpha1api20210601
-kind: FlexibleServersFirewallRule
+apiVersion: microsoft.serviceconnector.azure.com/v1alpha1api20210601
+kind: serviceconnector
 metadata:
-  name: asodemo-allow-all
+  name: sc
   namespace: asodemo
 spec:
-  owner:
-    name: ${SERVER}
-  # The following address range allows anybody to connect to this server.
-  # This should only be used for demo purposes and not in production!
-  # There are other ways to control server access which are not covered here, you can see more about it here:
-  # https://docs.microsoft.com/azure/postgresql/flexible-server/concepts-security#network-security
-  startIpAddress: 0.0.0.0
-  endIpAddress: 255.255.255.255
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: postgres-secret
-  namespace: asodemo
-stringData:
-  USERNAME: "$USERNAME"
-  PASSWORD: "$PASSWORD"
-  SERVER:   "$SERVER.postgres.database.azure.com"
-  DATABASE: "votedb"
-  PORT:     "5432"
+  target:
+    name: votedb
+    type: FlexibleServersDatabase
+  auth:
+    type: secret
+    username: ${USERNAME}
+    password: ${PASSWORD}
