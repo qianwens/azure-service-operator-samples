@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-votes-postgresql-deployment
+  namespace: asodemo
+spec:
+  selector:
+    matchLabels:
+      app: azure-votes-postgresql
+  replicas: 1
+  template:
+    metadata:
+      name: postgresql-demo
+      labels:
+        app: azure-votes-postgresql
+        connection: sc
+    spec:
+      containers:
+        - name: azure-votes-postgresql
+          image: mcr.microsoft.com/k8s/asodemos/postgresqlvotes:latest
+          ports:
+            - containerPort: 8080
